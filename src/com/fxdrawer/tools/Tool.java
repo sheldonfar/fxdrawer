@@ -1,5 +1,6 @@
 package com.fxdrawer.tools;
 
+import com.fxdrawer.util.Coordinates;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
@@ -7,12 +8,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.net.URL;
 
 public abstract class Tool {
     Pane pane;
     int size;
+    String name;
     private ImageCursor imageCursor;
+
 
     Tool(Pane pane) {
         this.pane = pane;
@@ -21,7 +25,6 @@ public abstract class Tool {
     public void setCursor() {
         if (imageCursor == null) {
             URL url = getClass().getResource(getCursorPath());
-            System.out.println("URLLLLLL " + url);
             Image image = new Image(url.toString(), 32, 32, true, false);
             this.imageCursor = new ImageCursor(image, -image.getWidth(), image.getHeight());
         }
@@ -30,7 +33,7 @@ public abstract class Tool {
 
     protected abstract String getCursorPath();
 
-    public abstract void draw(double oldX, double oldY, double currentX, double currentY);
+    public abstract void draw(Coordinates coordinates);
 
     public abstract void setColor(Color color);
 
@@ -40,5 +43,9 @@ public abstract class Tool {
 
     public void destroy() {
         this.pane.setCursor(Cursor.DEFAULT);
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

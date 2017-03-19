@@ -1,11 +1,13 @@
 package com.fxdrawer.tools;
 
+import com.fxdrawer.util.Coordinates;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Pen extends Tool {
     private Color color;
+    String name = "Pen";
 
     public Pen(Pane pane, int size, Color color) {
         super(pane);
@@ -27,11 +29,13 @@ public class Pen extends Tool {
         this.color = color;
     }
 
-    public void draw(double oldX, double oldY, double currentX, double currentY) {
-        Line line = new Line(oldX, oldY, currentX, currentY);
+    public void draw(Coordinates coordinates) {
+        Line line = new Line(coordinates.getX1(), coordinates.getY1(), coordinates.getX2(), coordinates.getY2());
         line.setStrokeWidth(size);
         line.setStroke(color);
 
         pane.getChildren().add(line);
     }
+
+
 }
