@@ -40,26 +40,30 @@ public class DrawController implements Initializable {
     private Peer peer;
     private long lastPressProcessed = System.currentTimeMillis();
     private Map<String, Tool> toolMap = new HashMap<>();
+    private Tool tool;
     private Set<String> stringSet = new HashSet<>();
-    ObservableList observableList = FXCollections.observableArrayList();
-
+    private ObservableList observableList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         int initialToolSize = (int) sizeSlider.getValue();
         toolMap.put("Pen", new Pen(drawPane, initialToolSize, colorPicker.getValue()));
         toolMap.put("Eraser", new Eraser(drawPane, initialToolSize));
+        tool = toolMap.get("Pen");
+        toolCombo.getSelectionModel().selectFirst();
 
-        sizeCombo.setValue(initialToolSize);
         rightSplitPaneDividerSlider = new SplitPaneDividerSlider(mainSplitPane, 0, SplitPaneDividerSlider.Direction.LEFT);
 
         sizeSlider.valueProperty().addListener((selected, oldSize, newSize) -> {
             int size = newSize.intValue();
             sizeCombo.setValue(size);
-            toolMap.get(toolCombo.getValue().toString()).setSize(size);
+
+            tool.setSize(size);
         });
 
-        colorPicker.setOnAction(t -> toolMap.get(toolCombo.getValue().toString()).setColor(colorPicker.getValue()));
+        toolCombo.valueProperty().addListener((selected, oldTool, newTool) -> tool = toolMap.get(((Label) newTool).getText()));
+
+        colorPicker.setOnAction(t -> tool.setColor(colorPicker.getValue()));
     }
 
     public void onPanelClick(MouseEvent event) {
@@ -68,13 +72,12 @@ public class DrawController implements Initializable {
 
         Coordinates coord = new Coordinates(oldX, oldX, oldY, oldY);
 
-        toolMap.get(toolCombo.getValue().toString()).draw(coord);
+        tool.draw(coord);
     }
 
     public void onPanelMouseMove(MouseEvent event) {
         oldX = event.getX();
         oldY = event.getY();
-
     }
 
     public void onPanelMouseDrag(MouseEvent event) {
@@ -88,7 +91,7 @@ public class DrawController implements Initializable {
         Coordinates coord = new Coordinates(oldX, currentX, oldY, currentY);
 
         String toolName = toolCombo.getValue().toString();
-        Tool tool =  toolMap.get(toolCombo.getValue().toString());
+
         if (peer != null) {
             peer.onAction(toolName, tool.getSize(), coord);
         }
@@ -148,5 +151,10 @@ public class DrawController implements Initializable {
         stringSet.add(action);
         observableList.setAll(stringSet);
         log.setItems(observableList);
+    }
+
+    public void clearLog() {
+        stringSet.clear();
+        log.getItems().clear();
     }
 }
