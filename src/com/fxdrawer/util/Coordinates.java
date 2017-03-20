@@ -8,7 +8,6 @@ public class Coordinates implements Serializable {
     private double y1;
     private double y2;
 
-
     public Coordinates(double x1, double x2, double y1, double y2) {
         this.x1 = x1;
         this.x2 = x2;
@@ -30,5 +29,9 @@ public class Coordinates implements Serializable {
 
     public double getY2() {
         return y2;
+    }
+
+    public String toString() {
+        return x1 + "  " + x2 + "  " + y1 + "  " + y2;
     }
 }

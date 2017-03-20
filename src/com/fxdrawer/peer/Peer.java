@@ -1,9 +1,9 @@
 package com.fxdrawer.peer;
 
 import com.fxdrawer.DrawController;
+import com.fxdrawer.packet.Packet;
 import com.fxdrawer.packet.PacketAction;
 import com.fxdrawer.packet.PacketConnectToPeer;
-import com.fxdrawer.tools.Tool;
 import com.fxdrawer.util.Coordinates;
 
 import java.io.IOException;
@@ -27,7 +27,6 @@ public class Peer {
         Runnable serverTask = () -> {
             try {
                 peerSocket = new ServerSocket(port);
-                System.out.println("Waiting for clients to connect on port " + port);
                 while (true) {
                     final Socket socket = peerSocket.accept();
                     serverHandler = new PeerSocketHandler(socket, this);
@@ -45,7 +44,6 @@ public class Peer {
 
     public void openConnection(String hostName, int portNumber) {
         try {
-            System.out.println("OPEN CONNECTION ");
             clientHandler = new PeerSocketHandler(new Socket(hostName, portNumber), this);
         } catch (IOException e) {
             e.printStackTrace();

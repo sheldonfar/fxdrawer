@@ -14,7 +14,7 @@ import java.net.URL;
 public abstract class Tool {
     Pane pane;
     int size;
-    String name;
+    private String name;
     private ImageCursor imageCursor;
 
 

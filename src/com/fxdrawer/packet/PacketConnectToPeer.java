@@ -15,6 +15,11 @@ public class PacketConnectToPeer extends Packet {
         handler.receivedConnectToPeerPacket(this);
     }
 
+    @Override
+    public String toString() {
+        return "Connecting to another user";
+    }
+
     public String getHostName() {
         return hostName;
     }

@@ -38,10 +38,12 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
         }
     }
 
-    protected final void handleConnection() throws IOException {
+    protected void handleConnection() throws IOException {
         try {
             for (Object obj = in.readObject(); obj != null; obj = in.readObject()) {
-                ((Packet) obj).process(this);
+                Packet packet = (Packet) obj;
+                packet.process(this);
+                logAction(packet);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,6 +55,10 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
     }
 
     protected void connectionClosed() {
+    }
+
+    protected void logAction(Packet packet) {
+
     }
 
     public synchronized void sendPacket(Packet packet) {

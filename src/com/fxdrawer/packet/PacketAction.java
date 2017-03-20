@@ -17,6 +17,11 @@ public class PacketAction extends Packet {
         handler.receivedActionPacket(this);
     }
 
+    @Override
+    public String toString() {
+        return "Action: " + tool + "  " + coordinates.toString();
+    }
+
     public String getTool() {
         return tool;
     }

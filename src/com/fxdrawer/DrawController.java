@@ -7,6 +7,8 @@ import com.fxdrawer.util.SplitPaneDividerSlider;
 import com.jfoenix.controls.JFXColorPicker;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,10 +18,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class DrawController implements Initializable {
     public Pane drawPane = new Pane();
@@ -27,7 +26,6 @@ public class DrawController implements Initializable {
     public SplitPane mainSplitPane;
     public Label userHostLabel;
     public Label userPortLabel;
-    public ListView historyView;
     public MenuItem connectBtn;
     public Label peerHostLabel;
     public Label peerPortLabel;
@@ -35,11 +33,16 @@ public class DrawController implements Initializable {
     public JFXColorPicker colorPicker;
     public JFXComboBox toolCombo;
     public JFXComboBox sizeCombo;
+    public ListView log;
     private double oldX;
     private double oldY;
     private SplitPaneDividerSlider rightSplitPaneDividerSlider;
     private Peer peer;
+    private long lastPressProcessed = System.currentTimeMillis();
     private Map<String, Tool> toolMap = new HashMap<>();
+    private Set<String> stringSet = new HashSet<>();
+    ObservableList observableList = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -75,6 +78,10 @@ public class DrawController implements Initializable {
     }
 
     public void onPanelMouseDrag(MouseEvent event) {
+        if (System.currentTimeMillis() - lastPressProcessed < 50) {
+            return;
+        }
+
         double currentX = event.getX();
         double currentY = event.getY();
 
@@ -88,6 +95,8 @@ public class DrawController implements Initializable {
 
         oldX = currentX;
         oldY = currentY;
+
+        lastPressProcessed = System.currentTimeMillis();
     }
 
     public void onToggleStateClick() throws IOException {
@@ -127,5 +136,12 @@ public class DrawController implements Initializable {
 
     public void onAction(String tool, Coordinates coordinates) {
         toolMap.get(tool).draw(coordinates);
+    }
+
+    public void logAction(String action) {
+        System.out.println("ACTION " + action);
+        stringSet.add(action);
+        observableList.setAll(stringSet);
+        log.setItems(observableList);
     }
 }

@@ -77,7 +77,7 @@
                 <Label layoutX="185.0" layoutY="111.0" text="Port:"/>
                 <Label fx:id="peerPortLabel" layoutX="216.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
 
-                <ListView fx:id="historyView" layoutX="33.0" layoutY="178.0" prefHeight="200.0" prefWidth="200.0"/>
+                <ListView fx:id="log" layoutX="33.0" layoutY="178.0" prefHeight="200.0" prefWidth="200.0"></ListView>
             </AnchorPane>
         </SplitPane>
     </SplitPane>
