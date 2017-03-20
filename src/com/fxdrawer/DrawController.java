@@ -87,11 +87,13 @@ public class DrawController implements Initializable {
 
         Coordinates coord = new Coordinates(oldX, currentX, oldY, currentY);
 
+        String toolName = toolCombo.getValue().toString();
+        Tool tool =  toolMap.get(toolCombo.getValue().toString());
         if (peer != null) {
-            peer.onAction(toolCombo.getValue().toString(), coord);
+            peer.onAction(toolName, tool.getSize(), coord);
         }
 
-        toolMap.get(toolCombo.getValue().toString()).draw(coord);
+        tool.draw(coord);
 
         oldX = currentX;
         oldY = currentY;
@@ -134,12 +136,15 @@ public class DrawController implements Initializable {
         peerPortLabel.setText(String.valueOf(portNumber));
     }
 
-    public void onAction(String tool, Coordinates coordinates) {
-        toolMap.get(tool).draw(coordinates);
+    public void onAction(String toolName, int size, Coordinates coordinates) {
+        Tool tool = toolMap.get(toolName);
+        int originalSize = tool.getSize();
+        tool.setSize(size);
+        tool.draw(coordinates);
+        tool.setSize(originalSize);
     }
 
     public void logAction(String action) {
-        System.out.println("ACTION " + action);
         stringSet.add(action);
         observableList.setAll(stringSet);
         log.setItems(observableList);

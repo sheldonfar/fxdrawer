@@ -7,11 +7,9 @@ import javafx.scene.shape.Line;
 
 public class Pen extends Tool {
     private Color color;
-    String name = "Pen";
 
     public Pen(Pane pane, int size, Color color) {
         super(pane);
-
         setCursor();
         setSize(size);
         setColor(color);
@@ -36,6 +34,4 @@ public class Pen extends Tool {
 
         pane.getChildren().add(line);
     }
-
-
 }

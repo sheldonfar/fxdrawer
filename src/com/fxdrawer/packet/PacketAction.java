@@ -6,10 +6,12 @@ import com.fxdrawer.util.Coordinates;
 
 public class PacketAction extends Packet {
     private final String tool;
+    private final int size;
     private final Coordinates coordinates;
 
-    public PacketAction(String tool, Coordinates coordinates) {
+    public PacketAction(String tool, int size, Coordinates coordinates) {
         this.tool = tool;
+        this.size = size;
         this.coordinates = coordinates;
     }
     @Override
@@ -19,11 +21,15 @@ public class PacketAction extends Packet {
 
     @Override
     public String toString() {
-        return "Action: " + tool + "  " + coordinates.toString();
+        return "Action: " + tool + "  ; Size: " + size + " " + coordinates.toString();
     }
 
     public String getTool() {
         return tool;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public Coordinates getCoordinates() {

@@ -63,8 +63,8 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
 
     public synchronized void sendPacket(Packet packet) {
         try {
-            System.out.println("SENDING PACKET " + packet);
             out.writeObject(packet);
+            logAction(packet);
         } catch (IOException e) {
             e.printStackTrace();
         }

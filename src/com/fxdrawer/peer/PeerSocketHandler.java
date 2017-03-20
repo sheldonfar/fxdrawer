@@ -26,7 +26,7 @@ public class PeerSocketHandler extends SocketHandler {
     }
 
     public void receivedActionPacket(PacketAction packet) {
-        Platform.runLater(() -> peer.getView().onAction(packet.getTool(), packet.getCoordinates()));
+        Platform.runLater(() -> peer.getView().onAction(packet.getTool(), packet.getSize(), packet.getCoordinates()));
     }
 
     PeerState getState() {

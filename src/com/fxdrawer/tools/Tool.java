@@ -6,15 +6,11 @@ import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
-import java.awt.*;
-import java.io.Serializable;
 import java.net.URL;
 
 public abstract class Tool {
     Pane pane;
     int size;
-    private String name;
     private ImageCursor imageCursor;
 
 
@@ -41,11 +37,11 @@ public abstract class Tool {
         this.size = size;
     }
 
-    public void destroy() {
-        this.pane.setCursor(Cursor.DEFAULT);
+    public int getSize() {
+        return this.size;
     }
 
-    public String getName() {
-        return this.name;
+    public void destroy() {
+        this.pane.setCursor(Cursor.DEFAULT);
     }
 }

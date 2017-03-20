@@ -54,8 +54,8 @@ public class Peer {
         clientHandler.sendPacket(packet);
     }
 
-    public void onAction(String tool, Coordinates coordinates) {
-        PacketAction packet = new PacketAction(tool, coordinates);
+    public void onAction(String tool, int size, Coordinates coordinates) {
+        PacketAction packet = new PacketAction(tool, size, coordinates);
         if (clientHandler != null && clientHandler.getState() == PeerState.CONNECTED) {
             clientHandler.sendPacket(packet);
         } else if (serverHandler != null && serverHandler.getState() == PeerState.CONNECTED) {
