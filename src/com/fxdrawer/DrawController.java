@@ -50,6 +50,8 @@ public class DrawController implements Initializable {
         toolMap.put("Pen", new Pen(drawPane, initialToolSize, colorPicker.getValue()));
         toolMap.put("Eraser", new Eraser(drawPane, initialToolSize));
         tool = toolMap.get("Pen");
+        drawPane.setCursor(tool.getCursor());
+
         toolCombo.getSelectionModel().selectFirst();
 
         rightSplitPaneDividerSlider = new SplitPaneDividerSlider(mainSplitPane, 0, SplitPaneDividerSlider.Direction.LEFT);
@@ -61,7 +63,13 @@ public class DrawController implements Initializable {
             tool.setSize(size);
         });
 
-        toolCombo.valueProperty().addListener((selected, oldTool, newTool) -> tool = toolMap.get(((Label) newTool).getText()));
+        toolCombo.valueProperty().addListener((selected, oldTool, newTool) -> {
+            tool = toolMap.get(((Label) newTool).getText());
+        });
+
+        drawPane.setOnMouseEntered(me -> drawPane.setCursor(tool.getCursor()));
+
+        drawPane.setOnMouseExited(me -> drawPane.setCursor(tool.getDefaultCursor()));
 
         colorPicker.setOnAction(t -> tool.setColor(colorPicker.getValue()));
     }

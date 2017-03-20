@@ -11,7 +11,7 @@ public class Eraser extends Tool {
     public Eraser(Pane pane, int size) {
         super(pane);
         setSize(size);
-        setCursor();
+        createCursor();
     }
 
     public String getCursorPath() {

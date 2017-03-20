@@ -18,13 +18,12 @@ public abstract class Tool {
         this.pane = pane;
     }
 
-    public void setCursor() {
+    public void createCursor() {
         if (imageCursor == null) {
             URL url = getClass().getResource(getCursorPath());
             Image image = new Image(url.toString(), 32, 32, true, false);
             this.imageCursor = new ImageCursor(image, -image.getWidth(), image.getHeight());
         }
-        this.pane.setCursor(imageCursor);
     }
 
     protected abstract String getCursorPath();
@@ -41,7 +40,11 @@ public abstract class Tool {
         return this.size;
     }
 
-    public void destroy() {
-        this.pane.setCursor(Cursor.DEFAULT);
+    public ImageCursor getCursor() {
+        return this.imageCursor;
+    }
+
+    public Cursor getDefaultCursor() {
+        return Cursor.DEFAULT;
     }
 }

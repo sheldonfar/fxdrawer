@@ -10,7 +10,7 @@ public class Pen extends Tool {
 
     public Pen(Pane pane, int size, Color color) {
         super(pane);
-        setCursor();
+        createCursor();
         setSize(size);
         setColor(color);
     }
