@@ -22,6 +22,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <?import javafx.scene.layout.StackPane?>
+<?import com.jfoenix.controls.JFXButton?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.fxdrawer.DrawController">
     <SplitPane dividerPositions="0.5" orientation="VERTICAL">
@@ -73,6 +74,12 @@
                     </JFXColorPicker>
                     <Separator orientation="VERTICAL"/>
                     <JFXToggleButton fx:id="toggleStateSwitch" onAction="#onToggleStateClick"/>
+                    <Separator orientation="VERTICAL"/>
+                    <JFXButton fx:id="lockButton" onAction="#onLockButtonClick" visible="false">
+                        <graphic>
+                            <FontAwesomeIconView fx:id="lockIcon" size="15.0" glyphName="UNLOCK_ALT"/>
+                        </graphic>
+                    </JFXButton>
                 </ToolBar>
                 <Pane fx:id="drawPane" onMouseClicked="#onPanelClick" onMouseDragged="#onPanelMouseDrag"
                       onMouseMoved="#onPanelMouseMove" prefHeight="335.0" prefWidth="800.0"

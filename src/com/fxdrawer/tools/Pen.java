@@ -9,7 +9,6 @@ public class Pen extends Tool {
     private Color color;
     String name = "Pen";
 
-
     public Pen(Pane pane, int size, Color color) {
         super(pane);
         createCursor();

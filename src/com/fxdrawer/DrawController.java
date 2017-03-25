@@ -1,12 +1,15 @@
 package com.fxdrawer;
 
+import com.fxdrawer.peer.BoardLock;
 import com.fxdrawer.peer.Peer;
 import com.fxdrawer.tools.*;
 import com.fxdrawer.util.Coordinates;
 import com.fxdrawer.util.SplitPaneDividerSlider;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXColorPicker;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,6 +37,8 @@ public class DrawController implements Initializable {
     public JFXComboBox toolCombo;
     public JFXComboBox sizeCombo;
     public ListView log;
+    public JFXButton lockButton;
+    public FontAwesomeIconView lockIcon;
     private double oldX;
     private double oldY;
     private SplitPaneDividerSlider rightSplitPaneDividerSlider;
@@ -78,9 +83,7 @@ public class DrawController implements Initializable {
         oldX = event.getX();
         oldY = event.getY();
 
-        Coordinates coord = new Coordinates(oldX, oldX, oldY, oldY);
-
-        tool.draw(coord);
+        draw(new Coordinates(oldX, oldX, oldY, oldY));
     }
 
     public void onPanelMouseMove(MouseEvent event) {
@@ -96,18 +99,23 @@ public class DrawController implements Initializable {
         double currentX = event.getX();
         double currentY = event.getY();
 
-        Coordinates coord = new Coordinates(oldX, currentX, oldY, currentY);
-
-        if (peer != null) {
-            peer.onAction(tool.getName(), tool.getSize(), coord);
-        }
-
-        tool.draw(coord);
+        draw(new Coordinates(oldX, currentX, oldY, currentY));
 
         oldX = currentX;
         oldY = currentY;
 
         lastPressProcessed = System.currentTimeMillis();
+    }
+
+    private void draw(Coordinates coord) {
+        if (peer != null) {
+            if (!peer.getBoardLock().isLocked()) {
+                tool.draw(coord);
+                peer.onAction(tool.getName(), tool.getSize(), coord);
+            }
+        } else {
+            tool.draw(coord);
+        }
     }
 
     public void onToggleStateClick() throws IOException {
@@ -121,6 +129,7 @@ public class DrawController implements Initializable {
                 userPortLabel.setText(port);
                 rightSplitPaneDividerSlider.setMinWidth(drawPane.getBoundsInParent().getWidth() * 0.65);
                 rightSplitPaneDividerSlider.setAimContentVisible(false);
+                lockButton.setVisible(true);
 
                 try {
                     peer = new Peer(Integer.parseInt(port));
@@ -133,6 +142,7 @@ public class DrawController implements Initializable {
         } else {
             rightSplitPaneDividerSlider.setMinWidth(drawPane.getBoundsInParent().getWidth());
             rightSplitPaneDividerSlider.setAimContentVisible(true);
+            lockButton.setVisible(false);
         }
     }
 
@@ -162,5 +172,18 @@ public class DrawController implements Initializable {
     public void clearLog() {
         stringSet.clear();
         log.getItems().clear();
+    }
+
+    public void onLockButtonClick() {
+        BoardLock bl = peer.getBoardLock();
+        if (!bl.isLocked()) {
+            Boolean wasLocked = bl.getTryingToLock() || bl.isBlocking();
+            peer.lock(!wasLocked);
+            lock(!wasLocked);
+        }
+    }
+
+    public void lock(Boolean lock) {
+        lockIcon.setGlyphName(lock ? "LOCK" : "UNLOCK_ALT");
     }
 }

@@ -1,8 +1,7 @@
 package com.fxdrawer.peer;
 
-import com.fxdrawer.packet.Packet;
-import com.fxdrawer.packet.PacketAction;
-import com.fxdrawer.packet.PacketConnectToPeer;
+import com.fxdrawer.DrawController;
+import com.fxdrawer.packet.*;
 import com.fxdrawer.socket.SocketHandler;
 import javafx.application.Platform;
 
@@ -12,21 +11,41 @@ import java.net.Socket;
 public class PeerSocketHandler extends SocketHandler {
 
     private PeerState state;
-    private Peer peer;
+    private BoardLock bl;
+    private DrawController view;
 
     PeerSocketHandler(Socket socket, Peer peer) throws IOException {
         super(socket);
-        this.peer = peer;
         this.state = PeerState.IDLE;
+        bl = peer.getBoardLock();
+        view = peer.getView();
     }
 
     public void receivedConnectToPeerPacket(PacketConnectToPeer packet) {
-        Platform.runLater(() -> peer.getView().onPeerConnected(packet.getHostName(), packet.getPortNumber()));
+        Platform.runLater(() -> view.onPeerConnected(packet.getHostName(), packet.getPortNumber()));
         this.state = PeerState.CONNECTED;
     }
 
     public void receivedActionPacket(PacketAction packet) {
-        Platform.runLater(() -> peer.getView().onAction(packet.getTool(), packet.getSize(), packet.getCoordinates()));
+        Platform.runLater(() -> view.onAction(packet.getTool(), packet.getSize(), packet.getCoordinates()));
+    }
+
+    public void receivedRequestLockPacket(PacketRequestLock packet) {
+        Platform.runLater(() -> view.lock(true));
+        if (!bl.getTryingToLock() || bl.getTimestamp() > packet.getTimestamp()) {
+            sendPacket(new PacketRequestLockAck());
+        }
+        bl.setLocked(true);
+    }
+
+    public void receivedRequestLockAckPacket(PacketRequestLockAck packet) {
+        if (bl.isLocked()) {
+            Platform.runLater(() -> view.lock(false));
+        }
+        if (bl.getTryingToLock()) {
+            bl.blockPermitted();
+        }
+        bl.setLocked(false);
     }
 
     PeerState getState() {
@@ -34,6 +53,6 @@ public class PeerSocketHandler extends SocketHandler {
     }
 
     protected void logAction(Packet packet) {
-        Platform.runLater(() -> peer.getView().logAction(packet.toString()));
+        Platform.runLater(() -> view.logAction(packet.toString()));
     }
 }

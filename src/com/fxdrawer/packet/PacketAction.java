@@ -14,6 +14,7 @@ public class PacketAction extends Packet {
         this.size = size;
         this.coordinates = coordinates;
     }
+
     @Override
     public void process(SocketHandler handler) {
         handler.receivedActionPacket(this);

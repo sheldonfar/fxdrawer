@@ -1,7 +1,6 @@
 package com.fxdrawer.socket;
 
 import com.fxdrawer.packet.Packet;
-import com.fxdrawer.packet.PacketConnectToPeer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

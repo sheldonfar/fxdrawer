@@ -1,9 +1,7 @@
 package com.fxdrawer.peer;
 
 import com.fxdrawer.DrawController;
-import com.fxdrawer.packet.Packet;
-import com.fxdrawer.packet.PacketAction;
-import com.fxdrawer.packet.PacketConnectToPeer;
+import com.fxdrawer.packet.*;
 import com.fxdrawer.util.Coordinates;
 
 import java.io.IOException;
@@ -17,6 +15,7 @@ public class Peer {
     private ServerSocket peerSocket;
     private int port;
     private DrawController view;
+    private BoardLock boardLock = new BoardLock();
 
     public Peer(int port) throws IOException {
         this.port = port;
@@ -55,12 +54,7 @@ public class Peer {
     }
 
     public void onAction(String tool, int size, Coordinates coordinates) {
-        PacketAction packet = new PacketAction(tool, size, coordinates);
-        if (clientHandler != null && clientHandler.getState() == PeerState.CONNECTED) {
-            clientHandler.sendPacket(packet);
-        } else if (serverHandler != null && serverHandler.getState() == PeerState.CONNECTED) {
-            serverHandler.sendPacket(packet);
-        }
+        sendPacket(new PacketAction(tool, size, coordinates));
     }
 
     public void setView(DrawController view) {
@@ -73,5 +67,27 @@ public class Peer {
 
     public int getPort() {
         return this.port;
+    }
+
+    public void lock(Boolean lock) {
+        if (lock) {
+            boardLock.tryToLock();
+            sendPacket(new PacketRequestLock(boardLock.getTimestamp()));
+        } else {
+            boardLock.unblock();
+            sendPacket(new PacketRequestLockAck());
+        }
+    }
+
+    public void sendPacket(Packet packet) {
+        if (clientHandler != null && clientHandler.getState() == PeerState.CONNECTED) {
+            clientHandler.sendPacket(packet);
+        } else if (serverHandler != null && serverHandler.getState() == PeerState.CONNECTED) {
+            serverHandler.sendPacket(packet);
+        }
+    }
+
+    public BoardLock getBoardLock() {
+        return this.boardLock;
     }
 }
