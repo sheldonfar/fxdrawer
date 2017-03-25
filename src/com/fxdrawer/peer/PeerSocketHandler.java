@@ -27,7 +27,7 @@ public class PeerSocketHandler extends SocketHandler {
     }
 
     public void receivedActionPacket(PacketAction packet) {
-        Platform.runLater(() -> view.onAction(packet.getTool(), packet.getSize(), packet.getCoordinates()));
+        Platform.runLater(() -> view.onAction(packet.getTool(), packet.getSize(), packet.getColor(), packet.getCoordinates()));
     }
 
     public void receivedRequestLockPacket(PacketRequestLock packet) {

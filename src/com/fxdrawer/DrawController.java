@@ -2,7 +2,9 @@ package com.fxdrawer;
 
 import com.fxdrawer.peer.BoardLock;
 import com.fxdrawer.peer.Peer;
-import com.fxdrawer.tools.*;
+import com.fxdrawer.tools.Eraser;
+import com.fxdrawer.tools.Pen;
+import com.fxdrawer.tools.Tool;
 import com.fxdrawer.util.Coordinates;
 import com.fxdrawer.util.SplitPaneDividerSlider;
 import com.jfoenix.controls.JFXButton;
@@ -18,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.net.URL;
@@ -111,7 +114,7 @@ public class DrawController implements Initializable {
         if (peer != null) {
             if (!peer.getBoardLock().isLocked()) {
                 tool.draw(coord);
-                peer.onAction(tool.getName(), tool.getSize(), coord);
+                peer.onAction(tool.getName(), tool.getSize(), tool.getColor().toString(), coord);
             }
         } else {
             tool.draw(coord);
@@ -155,12 +158,15 @@ public class DrawController implements Initializable {
         peerPortLabel.setText(String.valueOf(portNumber));
     }
 
-    public void onAction(String toolName, int size, Coordinates coordinates) {
+    public void onAction(String toolName, int size, String color, Coordinates coordinates) {
         Tool tool = toolMap.get(toolName);
         int originalSize = tool.getSize();
+        Color originalColor = tool.getColor();
         tool.setSize(size);
+        tool.setColor(Color.valueOf(color));
         tool.draw(coordinates);
         tool.setSize(originalSize);
+        tool.setColor(originalColor);
     }
 
     public void logAction(String action) {

@@ -53,8 +53,8 @@ public class Peer {
         clientHandler.sendPacket(packet);
     }
 
-    public void onAction(String tool, int size, Coordinates coordinates) {
-        sendPacket(new PacketAction(tool, size, coordinates));
+    public void onAction(String tool, int size, String color, Coordinates coordinates) {
+        sendPacket(new PacketAction(tool, size, color, coordinates));
     }
 
     public void setView(DrawController view) {

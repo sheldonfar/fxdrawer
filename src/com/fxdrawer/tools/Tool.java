@@ -6,6 +6,7 @@ import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
 import java.net.URL;
 
 public abstract class Tool {
@@ -32,6 +33,8 @@ public abstract class Tool {
     public abstract void draw(Coordinates coordinates);
 
     public abstract void setColor(Color color);
+
+    public abstract Color getColor();
 
     public void setSize(int size) {
         this.size = size;

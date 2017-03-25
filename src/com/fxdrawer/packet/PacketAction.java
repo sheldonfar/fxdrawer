@@ -1,18 +1,19 @@
 package com.fxdrawer.packet;
 
 import com.fxdrawer.socket.SocketHandler;
-import com.fxdrawer.tools.Tool;
 import com.fxdrawer.util.Coordinates;
 
 public class PacketAction extends Packet {
     private final String tool;
     private final int size;
     private final Coordinates coordinates;
+    private final String color;
 
-    public PacketAction(String tool, int size, Coordinates coordinates) {
+    public PacketAction(String tool, int size, String color, Coordinates coordinates) {
         this.tool = tool;
         this.size = size;
         this.coordinates = coordinates;
+        this.color = color;
     }
 
     @Override
@@ -22,7 +23,7 @@ public class PacketAction extends Packet {
 
     @Override
     public String toString() {
-        return "Action: " + tool + "  ; Size: " + size + " " + coordinates.toString();
+        return tool + "; Size: " + size + "; Color: " + color + "; " + coordinates.toString();
     }
 
     public String getTool() {
@@ -31,6 +32,10 @@ public class PacketAction extends Packet {
 
     public int getSize() {
         return size;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public Coordinates getCoordinates() {

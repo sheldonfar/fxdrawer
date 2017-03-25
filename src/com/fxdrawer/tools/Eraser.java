@@ -33,6 +33,10 @@ public class Eraser extends Tool {
 
     public void setColor(Color color) {}
 
+    public Color getColor() {
+        return this.color;
+    }
+
     public String getName() {
         return this.name;
     }

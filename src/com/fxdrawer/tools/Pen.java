@@ -28,6 +28,10 @@ public class Pen extends Tool {
         this.color = color;
     }
 
+    public Color getColor() {
+        return this.color;
+    }
+
     public void draw(Coordinates coordinates) {
         Line line = new Line(coordinates.getX1(), coordinates.getY1(), coordinates.getX2(), coordinates.getY2());
         line.setStrokeWidth(size);
