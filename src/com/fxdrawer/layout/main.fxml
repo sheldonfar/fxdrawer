@@ -22,8 +22,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <?import javafx.scene.layout.StackPane?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.fxdrawer.DrawController">
     <SplitPane dividerPositions="0.5" orientation="VERTICAL">
         <MenuBar>
@@ -56,7 +55,7 @@
                     </JFXComboBox>
                     <Separator orientation="VERTICAL"/>
                     <Label text="Size:"/>
-                    <JFXComboBox fx:id="sizeCombo" prefWidth="70.0">
+                    <JFXComboBox fx:id="sizeCombo" prefWidth="70.0" editable="true">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
                                 <Slider fx:id="sizeSlider" prefHeight="50.0" prefWidth="200.0" value="5"/>
@@ -76,7 +75,7 @@
                     <JFXToggleButton fx:id="toggleStateSwitch" onAction="#onToggleStateClick"/>
                 </ToolBar>
                 <Pane fx:id="drawPane" onMouseClicked="#onPanelClick" onMouseDragged="#onPanelMouseDrag"
-                      onMouseMoved="#onPanelMouseMove" prefHeight="327.0" prefWidth="800.0"
+                      onMouseMoved="#onPanelMouseMove" prefHeight="335.0" prefWidth="800.0"
                       style="-fx-background-color: white;"/>
             </SplitPane>
             <AnchorPane>
@@ -95,8 +94,8 @@
                 <Label fx:id="peerPortLabel" layoutX="216.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
                 <Separator layoutX="33.0" layoutY="140.0" prefHeight="0.0" prefWidth="200.0"/>
 
-                <VBox layoutX="29.0" layoutY="170.0" prefHeight="200.0" prefWidth="200.0">
-                    <ListView prefHeight="184.0" prefWidth="141.0" fx:id="log"/>
+                <VBox layoutX="29.0" layoutY="170.0">
+                    <ListView prefHeight="210.0" prefWidth="145.0" fx:id="log"/>
                     <Separator prefWidth="200.0"/>
                     <HBox>
                         <Pane HBox.hgrow="ALWAYS"/>

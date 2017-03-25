@@ -7,6 +7,7 @@ import javafx.scene.shape.Line;
 
 public class Eraser extends Tool {
     private Color color = Color.WHITE;
+    String name = "Eraser";
 
     public Eraser(Pane pane, int size) {
         super(pane);
@@ -31,4 +32,8 @@ public class Eraser extends Tool {
     }
 
     public void setColor(Color color) {}
+
+    public String getName() {
+        return this.name;
+    }
 }

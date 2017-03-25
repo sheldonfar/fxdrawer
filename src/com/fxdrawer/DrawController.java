@@ -58,7 +58,7 @@ public class DrawController implements Initializable {
 
         sizeSlider.valueProperty().addListener((selected, oldSize, newSize) -> {
             int size = newSize.intValue();
-            sizeCombo.setValue(size);
+            sizeCombo.valueProperty().setValue(size);
 
             tool.setSize(size);
         });
@@ -98,10 +98,8 @@ public class DrawController implements Initializable {
 
         Coordinates coord = new Coordinates(oldX, currentX, oldY, currentY);
 
-        String toolName = toolCombo.getValue().toString();
-
         if (peer != null) {
-            peer.onAction(toolName, tool.getSize(), coord);
+            peer.onAction(tool.getName(), tool.getSize(), coord);
         }
 
         tool.draw(coord);

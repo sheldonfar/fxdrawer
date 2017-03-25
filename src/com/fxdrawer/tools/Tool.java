@@ -11,6 +11,7 @@ import java.net.URL;
 public abstract class Tool {
     Pane pane;
     int size;
+    private String name = "Tool";
     private ImageCursor imageCursor;
 
 
@@ -46,5 +47,9 @@ public abstract class Tool {
 
     public Cursor getDefaultCursor() {
         return Cursor.DEFAULT;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
