@@ -37,7 +37,7 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
         }
     }
 
-    protected void handleConnection() throws IOException {
+    private void handleConnection() throws IOException {
         try {
             for (Object obj = in.readObject(); obj != null; obj = in.readObject()) {
                 Packet packet = (Packet) obj;
@@ -56,7 +56,7 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
         }
     }
 
-    protected void connectionClosed() {
+    private void connectionClosed() {
     }
 
     protected abstract void logAction(Packet packet);
@@ -71,5 +71,4 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
             e.printStackTrace();
         }
     }
-
 }

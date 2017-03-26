@@ -10,6 +10,7 @@ public class PacketConnectToPeer extends Packet {
         this.hostName = hostName;
         this.portNumber = portNumber;
     }
+
     @Override
     public void process(SocketHandler handler) {
         handler.receivedConnectToPeerPacket(this);

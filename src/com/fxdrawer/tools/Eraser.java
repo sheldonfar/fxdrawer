@@ -31,7 +31,8 @@ public class Eraser extends Tool {
         this.pane.getChildren().add(line);
     }
 
-    public void setColor(Color color) {}
+    public void setColor(Color color) {
+    }
 
     public Color getColor() {
         return this.color;

@@ -1,35 +1,16 @@
 package com.fxdrawer.peer;
 
-import com.fxdrawer.DrawController;
-import com.fxdrawer.packet.*;
-import com.fxdrawer.socket.SocketHandler;
+import com.fxdrawer.packet.PacketRequestLock;
+import com.fxdrawer.packet.PacketRequestLockAck;
 import javafx.application.Platform;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class ServerSocketHandler extends SocketHandler {
-
-    private PeerState state;
-    private BoardLock bl;
-    private Peer peer;
-    private DrawController view;
+public class ServerSocketHandler extends PeerSocketHandler {
 
     ServerSocketHandler(Socket socket, Peer peer) throws IOException {
-        super(socket);
-        this.state = PeerState.IDLE;
-        this.peer = peer;
-        bl = peer.getBoardLock();
-        view = peer.getView();
-    }
-
-    public void receivedConnectToPeerPacket(PacketConnectToPeer packet) {
-        Platform.runLater(() -> view.onPeerConnected(packet.getHostName(), packet.getPortNumber()));
-        this.state = PeerState.CONNECTED;
-    }
-
-    public void receivedActionPacket(PacketAction packet) {
-        Platform.runLater(() -> view.onAction(packet.getTool(), packet.getSize(), packet.getColor(), packet.getCoordinates()));
+        super(socket, peer);
     }
 
     public void receivedRequestLockPacket(PacketRequestLock packet) {
@@ -47,17 +28,4 @@ public class ServerSocketHandler extends SocketHandler {
             peer.sendPacket(new PacketRequestLockAck(peer.getPort()), bl.getLockInitiator());
         }
     }
-
-    PeerState getState() {
-        return this.state;
-    }
-
-    protected void logAction(Packet packet) {
-        Platform.runLater(() -> view.logAction(packet.toString()));
-    }
-
-    protected void broadcastAction(Packet packet) {
-        peer.broadcastAction(this.socket, packet);
-    }
-
 }

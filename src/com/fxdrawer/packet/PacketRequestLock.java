@@ -1,7 +1,6 @@
 package com.fxdrawer.packet;
 
 import com.fxdrawer.socket.SocketHandler;
-import java.util.Date;
 
 public class PacketRequestLock extends Packet {
     private final long timestamp;
@@ -9,6 +8,7 @@ public class PacketRequestLock extends Packet {
     public PacketRequestLock(long timestamp) {
         this.timestamp = timestamp;
     }
+
     @Override
     public void process(SocketHandler handler) {
         handler.receivedRequestLockPacket(this);
