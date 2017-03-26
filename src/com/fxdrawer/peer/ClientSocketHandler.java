@@ -8,15 +8,17 @@ import javafx.application.Platform;
 import java.io.IOException;
 import java.net.Socket;
 
-public class PeerSocketHandler extends SocketHandler {
+public class ClientSocketHandler extends SocketHandler {
 
     private PeerState state;
     private BoardLock bl;
+    private Peer peer;
     private DrawController view;
 
-    PeerSocketHandler(Socket socket, Peer peer) throws IOException {
+    ClientSocketHandler(Socket socket, Peer peer) throws IOException {
         super(socket);
         this.state = PeerState.IDLE;
+        this.peer = peer;
         bl = peer.getBoardLock();
         view = peer.getView();
     }
@@ -32,20 +34,15 @@ public class PeerSocketHandler extends SocketHandler {
 
     public void receivedRequestLockPacket(PacketRequestLock packet) {
         Platform.runLater(() -> view.lock(true));
-        if (!bl.getTryingToLock() || bl.getTimestamp() > packet.getTimestamp()) {
-            sendPacket(new PacketRequestLockAck());
+        if (!bl.isTryingToBlock() || bl.getTimestamp() > packet.getTimestamp()) {
+            sendPacket(new PacketRequestLockAck(peer.getPort()));
+            bl.setLockInitiator(this.socket);
+            bl.setLocked(true);
         }
-        bl.setLocked(true);
     }
 
     public void receivedRequestLockAckPacket(PacketRequestLockAck packet) {
-        if (bl.isLocked()) {
-            Platform.runLater(() -> view.lock(false));
-        }
-        if (bl.getTryingToLock()) {
-            bl.blockPermitted();
-        }
-        bl.setLocked(false);
+        bl.receivedAck(this.socket, packet, false);
     }
 
     PeerState getState() {
@@ -55,4 +52,9 @@ public class PeerSocketHandler extends SocketHandler {
     protected void logAction(Packet packet) {
         Platform.runLater(() -> view.logAction(packet.toString()));
     }
+
+    protected void broadcastAction(Packet packet) {
+        peer.broadcastAction(this.socket, packet);
+    }
+
 }

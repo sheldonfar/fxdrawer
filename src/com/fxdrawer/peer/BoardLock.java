@@ -1,45 +1,103 @@
 package com.fxdrawer.peer;
 
+import com.fxdrawer.DrawController;
+import com.fxdrawer.packet.Packet;
+import javafx.application.Platform;
+
+import java.net.Socket;
 import java.util.Date;
 
 public class BoardLock {
     private Boolean isBlocking = false;
     private Boolean isLocked = false;
-    private Boolean isTryingToLock = false;
+
+    public Socket getLockInitiator() {
+        return lockInitiator;
+    }
+
+    private Boolean isTryingToBlock = false;
     private long timestamp;
+
+    public int getReceivedAcks() {
+        return receivedAcks;
+    }
+
+    public int getRequiredAcks() {
+        return requiredAcks;
+    }
+
+    private int receivedAcks = 0;
+    private int requiredAcks = 1;
+    private Socket lockInitiator;
+    private DrawController view;
 
     public Boolean isLocked() {
         return isLocked;
     }
 
-    public Boolean getTryingToLock() {
-        return isTryingToLock;
+    public Boolean isTryingToBlock() {
+        return isTryingToBlock;
     }
 
     public long getTimestamp() {
         return timestamp;
     }
 
-    public void tryToLock() {
-        this.timestamp = new Date().getTime();
-        this.isTryingToLock = true;
+    public void init() {
+        timestamp = new Date().getTime();
+        isTryingToBlock = true;
+    }
+
+    public void setLockInitiator(Socket socket) {
+        lockInitiator = socket;
     }
 
     public void setLocked(Boolean locked) {
-        this.isLocked = locked;
+        isLocked = locked;
     }
 
-    public void blockPermitted() {
-        this.isBlocking = true;
-        this.isTryingToLock = false;
+    public void tryToBlock() {
+        if (receivedAcks >= requiredAcks) {
+            isBlocking = true;
+            isTryingToBlock = false;
+            Platform.runLater(() -> view.lock(true));
+        }
     }
 
     public Boolean isBlocking() {
-        return this.isBlocking;
+        return isBlocking;
     }
 
     public void unblock() {
-        this.isBlocking = false;
-        this.isTryingToLock = false;
+        isBlocking = false;
+        isTryingToBlock = false;
+        receivedAcks = 0;
+        Platform.runLater(() -> view.lock(false));
+    }
+
+    public void receivedAck(Socket socket, Packet packet, Boolean isMultiplexing) {
+        if (isTryingToBlock()) {
+            receivedAcks++;
+            tryToBlock();
+            packet.preventBroadcasting = true;
+        } else if (isMultiplexing) {
+            receivedAcks++;
+        }
+
+        if (lockInitiator == socket) {
+            isLocked = false;
+            if (!isBlocking) {
+                Platform.runLater(() -> view.lock(false));
+            }
+            receivedAcks = 0;
+        }
+    }
+
+    public void setRequiredAcks(int count) {
+        requiredAcks = count;
+    }
+
+    public void setView(DrawController view) {
+        this.view = view;
     }
 }

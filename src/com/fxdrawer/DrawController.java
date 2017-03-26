@@ -183,9 +183,8 @@ public class DrawController implements Initializable {
     public void onLockButtonClick() {
         BoardLock bl = peer.getBoardLock();
         if (!bl.isLocked()) {
-            Boolean wasLocked = bl.getTryingToLock() || bl.isBlocking();
+            Boolean wasLocked = bl.isTryingToBlock() || bl.isBlocking();
             peer.lock(!wasLocked);
-            lock(!wasLocked);
         }
     }
 

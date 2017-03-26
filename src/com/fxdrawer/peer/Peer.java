@@ -7,10 +7,12 @@ import com.fxdrawer.util.Coordinates;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Peer {
-    private PeerSocketHandler serverHandler;
-    private PeerSocketHandler clientHandler;
+    private Map<Socket, ServerSocketHandler> serverHandlers = new HashMap<>();
+    private ClientSocketHandler clientHandler;
 
     private ServerSocket peerSocket;
     private int port;
@@ -28,9 +30,11 @@ public class Peer {
                 peerSocket = new ServerSocket(port);
                 while (true) {
                     final Socket socket = peerSocket.accept();
-                    serverHandler = new PeerSocketHandler(socket, this);
-                    new Thread(serverHandler).start();
-                    serverHandler.sendPacket(new PacketConnectToPeer("localhost", getPort()));
+                    ServerSocketHandler handler = new ServerSocketHandler(socket, this);
+                    new Thread(handler).start();
+                    handler.sendPacket(new PacketConnectToPeer("localhost", getPort()));
+                    serverHandlers.put(socket, handler);
+                    boardLock.setRequiredAcks(serverHandlers.size());
                 }
             } catch (IOException e) {
                 System.err.println("Unable to process client request");
@@ -43,7 +47,7 @@ public class Peer {
 
     public void openConnection(String hostName, int portNumber) {
         try {
-            clientHandler = new PeerSocketHandler(new Socket(hostName, portNumber), this);
+            clientHandler = new ClientSocketHandler(new Socket(hostName, portNumber), this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,6 +63,7 @@ public class Peer {
 
     public void setView(DrawController view) {
         this.view = view;
+        this.boardLock.setView(view);
     }
 
     public DrawController getView() {
@@ -71,23 +76,43 @@ public class Peer {
 
     public void lock(Boolean lock) {
         if (lock) {
-            boardLock.tryToLock();
+            boardLock.init();
             sendPacket(new PacketRequestLock(boardLock.getTimestamp()));
         } else {
             boardLock.unblock();
-            sendPacket(new PacketRequestLockAck());
+            sendPacket(new PacketRequestLockAck(port));
         }
     }
 
     public void sendPacket(Packet packet) {
         if (clientHandler != null && clientHandler.getState() == PeerState.CONNECTED) {
             clientHandler.sendPacket(packet);
-        } else if (serverHandler != null && serverHandler.getState() == PeerState.CONNECTED) {
-            serverHandler.sendPacket(packet);
+        } else if (serverHandlers.size() != 0) {
+            for (ServerSocketHandler h : serverHandlers.values()) {
+                h.sendPacket(packet);
+            }
+        }
+    }
+
+    public void sendPacket(Packet packet, Socket socket) {
+        for (Object o : serverHandlers.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            if (pair.getKey() == socket) {
+                ((ServerSocketHandler) pair.getValue()).sendPacket(packet);
+            }
         }
     }
 
     public BoardLock getBoardLock() {
         return this.boardLock;
+    }
+
+    public void broadcastAction(Socket socket, Packet packet) {
+        for (Object o : serverHandlers.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            if (pair.getKey() != socket) {
+                ((ServerSocketHandler) pair.getValue()).sendPacket(packet);
+            }
+        }
     }
 }

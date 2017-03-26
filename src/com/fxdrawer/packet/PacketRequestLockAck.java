@@ -7,9 +7,17 @@ import java.util.Date;
 public class PacketRequestLockAck extends Packet {
     private final long timestamp;
 
-    public PacketRequestLockAck() {
-        this.timestamp = new Date().getTime();
+    public int getPort() {
+        return port;
     }
+
+    private final int port;
+
+    public PacketRequestLockAck(int port) {
+        this.timestamp = new Date().getTime();
+        this.port = port;
+    }
+
     @Override
     public void process(SocketHandler handler) {
         handler.receivedRequestLockAckPacket(this);
