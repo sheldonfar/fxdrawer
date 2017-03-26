@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.fxdrawer.util.RadioToggleButton?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXColorPicker?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.scene.layout.HBox?>
-
-<?import javafx.scene.layout.StackPane?>
-<?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.fxdrawer.DrawController">
     <SplitPane dividerPositions="0.5" orientation="VERTICAL">
@@ -31,86 +19,84 @@
                 <MenuItem fx:id="connectBtn" mnemonicParsing="false" onAction="#openConnection" text="Connect"/>
             </Menu>
         </MenuBar>
-        <SplitPane fx:id="mainSplitPane" dividerPositions="1.0">
-            <SplitPane dividerPositions="0.5" orientation="VERTICAL">
-                <ToolBar prefHeight="40.0">
-                    <JFXComboBox fx:id="toolCombo">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <Label text="Pen">
-                                    <graphic>
-                                        <StackPane>
-                                            <FontAwesomeIconView size="15.0" glyphName="PENCIL"/>
-                                        </StackPane>
-                                    </graphic>
-                                </Label>
-                                <Label text="Eraser">
-                                    <graphic>
-                                        <StackPane>
-                                            <FontAwesomeIconView size="15.0" glyphName="MINUS"/>
-                                        </StackPane>
-                                    </graphic>
-                                </Label>
-                            </FXCollections>
-                        </items>
-                    </JFXComboBox>
-                    <Separator orientation="VERTICAL"/>
-                    <Label text="Size:"/>
-                    <JFXComboBox fx:id="sizeCombo" prefWidth="70.0" editable="true">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <Slider fx:id="sizeSlider" prefHeight="50.0" prefWidth="200.0" value="5"/>
-                            </FXCollections>
-                        </items>
-                        <value>
-                            <String fx:value="5"/>
-                        </value>
-                    </JFXComboBox>
-                    <Separator orientation="VERTICAL"/>
-                    <JFXColorPicker fx:id="colorPicker">
-                        <value>
-                            <Color red="1.0"/>
-                        </value>
-                    </JFXColorPicker>
-                    <Separator orientation="VERTICAL"/>
-                    <JFXToggleButton fx:id="toggleStateSwitch" onAction="#onToggleStateClick"/>
-                    <Separator orientation="VERTICAL"/>
-                    <JFXButton fx:id="lockButton" onAction="#onLockButtonClick" visible="false">
+        <SplitPane fx:id="mainSplitPane" dividerPositions="0.8">
+            <SplitPane>
+                <ToolBar orientation="VERTICAL" styleClass="tools-bar">
+                    <fx:define>
+                        <ToggleGroup fx:id="toolToggleGroup"/>
+                    </fx:define>
+                    <RadioToggleButton textValue="Pen" toggleGroup="$toolToggleGroup" selected="true">
                         <graphic>
-                            <FontAwesomeIconView fx:id="lockIcon" size="15.0" glyphName="UNLOCK_ALT"/>
+                            <FontAwesomeIconView size="25.0" glyphName="PENCIL" styleClass="tool-icon"/>
                         </graphic>
-                    </JFXButton>
+                    </RadioToggleButton>
+                    <RadioToggleButton textValue="Eraser" toggleGroup="$toolToggleGroup">
+                        <graphic>
+                            <StackPane>
+                                <FontAwesomeIconView size="20.0" glyphName="ERASER" styleClass="tool-icon"/>
+                            </StackPane>
+                        </graphic>
+                    </RadioToggleButton>
                 </ToolBar>
-                <Pane fx:id="drawPane" onMouseClicked="#onPanelClick" onMouseDragged="#onPanelMouseDrag"
-                      onMouseMoved="#onPanelMouseMove" prefHeight="335.0" prefWidth="800.0"
-                      style="-fx-background-color: white;"/>
+                <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                    <ToolBar styleClass="tool-bar-horizontal">
+                        <Label text="Size:"/>
+                        <JFXComboBox fx:id="sizeCombo" prefWidth="70.0" editable="true">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <Slider fx:id="sizeSlider" prefHeight="50.0" prefWidth="200.0" value="5"/>
+                                </FXCollections>
+                            </items>
+                            <value>
+                                <String fx:value="5"/>
+                            </value>
+                        </JFXComboBox>
+                        <Separator orientation="VERTICAL"/>
+                        <JFXColorPicker fx:id="colorPicker">
+                            <value>
+                                <Color red="1.0"/>
+                            </value>
+                        </JFXColorPicker>
+                        <Separator orientation="VERTICAL"/>
+                        <JFXToggleButton fx:id="toggleStateSwitch" onAction="#onToggleStateClick"/>
+                        <Separator orientation="VERTICAL"/>
+                        <JFXButton fx:id="lockButton" onAction="#onLockButtonClick" visible="false">
+                            <graphic>
+                                <FontAwesomeIconView fx:id="lockIcon" size="15.0" glyphName="UNLOCK_ALT"/>
+                            </graphic>
+                        </JFXButton>
+                    </ToolBar>
+                    <Pane fx:id="drawPane" onMouseClicked="#onPanelClick" onMouseDragged="#onPanelMouseDrag"
+                          onMouseMoved="#onPanelMouseMove" prefHeight="330.0" prefWidth="500.0"
+                          style="-fx-background-color: white;"/>
+                </SplitPane>
+                <AnchorPane maxWidth="100">
+                    <Label layoutX="95.0" layoutY="6.0" text="Status"/>
+                    <Label layoutX="20.0" layoutY="32.0" text="Host:"/>
+                    <Label fx:id="userHostLabel" layoutX="60.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
+                    <Label layoutX="178.0" layoutY="32.0" text="Port:"/>
+                    <Label fx:id="userPortLabel" layoutX="216.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
+
+                    <Label layoutX="75.0" layoutY="85.0" text="Connected to"/>
+                    <Separator layoutX="33.0" layoutY="66.0" prefWidth="200.0"/>
+
+                    <Label layoutX="20.0" layoutY="111.0" text="Host:"/>
+                    <Label fx:id="peerHostLabel" layoutX="60.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
+                    <Label layoutX="178.0" layoutY="111.0" text="Port:"/>
+                    <Label fx:id="peerPortLabel" layoutX="216.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
+                    <Separator layoutX="33.0" layoutY="140.0" prefHeight="0.0" prefWidth="200.0"/>
+
+                    <VBox layoutX="29.0" layoutY="170.0">
+                        <ListView prefHeight="210.0" prefWidth="145.0" fx:id="log"/>
+                        <Separator prefWidth="200.0"/>
+                        <HBox>
+                            <Pane HBox.hgrow="ALWAYS"/>
+                            <FontAwesomeIconView onMouseClicked="#clearLog" size="15.0" glyphName="TRASH"
+                                                 textAlignment="RIGHT"/>
+                        </HBox>
+                    </VBox>
+                </AnchorPane>
             </SplitPane>
-            <AnchorPane>
-                <Label layoutX="95.0" layoutY="6.0" text="Status"/>
-                <Label layoutX="20.0" layoutY="32.0" text="Host:"/>
-                <Label fx:id="userHostLabel" layoutX="60.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
-                <Label layoutX="178.0" layoutY="32.0" text="Port:"/>
-                <Label fx:id="userPortLabel" layoutX="216.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
-
-                <Label layoutX="75.0" layoutY="85.0" text="Connected to"/>
-                <Separator layoutX="33.0" layoutY="66.0" prefWidth="200.0"/>
-
-                <Label layoutX="20.0" layoutY="111.0" text="Host:"/>
-                <Label fx:id="peerHostLabel" layoutX="60.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
-                <Label layoutX="178.0" layoutY="111.0" text="Port:"/>
-                <Label fx:id="peerPortLabel" layoutX="216.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
-                <Separator layoutX="33.0" layoutY="140.0" prefHeight="0.0" prefWidth="200.0"/>
-
-                <VBox layoutX="29.0" layoutY="170.0">
-                    <ListView prefHeight="210.0" prefWidth="145.0" fx:id="log"/>
-                    <Separator prefWidth="200.0"/>
-                    <HBox>
-                        <Pane HBox.hgrow="ALWAYS"/>
-                        <FontAwesomeIconView onMouseClicked="#clearLog" size="15.0" glyphName="TRASH"
-                                             textAlignment="RIGHT"/>
-                    </HBox>
-                </VBox>
-            </AnchorPane>
         </SplitPane>
     </SplitPane>
 </AnchorPane>

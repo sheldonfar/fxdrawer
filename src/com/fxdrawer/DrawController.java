@@ -6,7 +6,7 @@ import com.fxdrawer.tools.Eraser;
 import com.fxdrawer.tools.Pen;
 import com.fxdrawer.tools.Tool;
 import com.fxdrawer.util.Coordinates;
-import com.fxdrawer.util.SplitPaneDividerSlider;
+import com.fxdrawer.util.RadioToggleButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXColorPicker;
 import com.jfoenix.controls.JFXComboBox;
@@ -37,14 +37,13 @@ public class DrawController implements Initializable {
     public Label peerPortLabel;
     public JFXToggleButton toggleStateSwitch;
     public JFXColorPicker colorPicker;
-    public JFXComboBox toolCombo;
+    public ToggleGroup toolToggleGroup;
     public JFXComboBox sizeCombo;
     public ListView log;
     public JFXButton lockButton;
     public FontAwesomeIconView lockIcon;
     private double oldX;
     private double oldY;
-    private SplitPaneDividerSlider rightSplitPaneDividerSlider;
     private Peer peer;
     private long lastPressProcessed = System.currentTimeMillis();
     private Map<String, Tool> toolMap = new HashMap<>();
@@ -60,10 +59,6 @@ public class DrawController implements Initializable {
         tool = toolMap.get("Pen");
         drawPane.setCursor(tool.getCursor());
 
-        toolCombo.getSelectionModel().selectFirst();
-
-        rightSplitPaneDividerSlider = new SplitPaneDividerSlider(mainSplitPane, 0, SplitPaneDividerSlider.Direction.LEFT);
-
         sizeSlider.valueProperty().addListener((selected, oldSize, newSize) -> {
             int size = newSize.intValue();
             sizeCombo.valueProperty().setValue(size);
@@ -71,8 +66,10 @@ public class DrawController implements Initializable {
             tool.setSize(size);
         });
 
-        toolCombo.valueProperty().addListener((selected, oldTool, newTool) -> {
-            tool = toolMap.get(((Label) newTool).getText());
+        toolToggleGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> {
+            if (toolToggleGroup.getSelectedToggle() != null) {
+                tool = toolMap.get(((RadioToggleButton) toolToggleGroup.getSelectedToggle()).getTextValue());
+            }
         });
 
         drawPane.setOnMouseEntered(me -> drawPane.setCursor(tool.getCursor()));
@@ -130,8 +127,6 @@ public class DrawController implements Initializable {
             result.ifPresent(port -> {
                 userHostLabel.setText("localhost");
                 userPortLabel.setText(port);
-                rightSplitPaneDividerSlider.setMinWidth(drawPane.getBoundsInParent().getWidth() * 0.65);
-                rightSplitPaneDividerSlider.setAimContentVisible(false);
                 lockButton.setVisible(true);
 
                 try {
@@ -143,8 +138,6 @@ public class DrawController implements Initializable {
                 }
             });
         } else {
-            rightSplitPaneDividerSlider.setMinWidth(drawPane.getBoundsInParent().getWidth());
-            rightSplitPaneDividerSlider.setAimContentVisible(true);
             lockButton.setVisible(false);
         }
     }

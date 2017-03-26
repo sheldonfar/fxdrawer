@@ -1,3 +1,33 @@
 .split-pane *.split-pane-divider {
     -fx-padding: 0 1 0 0;
 }
+
+.tool-bar {
+    -fx-background-color: #FFFFFF;
+}
+
+.toggle-button {
+    -fx-background-color: #FFFFFF;
+}
+
+.tool-icon {
+    -icons-color: #C0CAD0;
+    -fx-text-fill: -icons-color;
+    -fx-fill: -icons-color;
+    -fx-border-width: 4px;
+    -fx-border-color: black;
+}
+
+.tool-icon:hover, .tools-bar .toggle-button:selected .tool-icon {
+    -icons-color: #465257;
+    -fx-text-fill: -icons-color;
+    -fx-fill: -icons-color;
+}
+
+.tools-bar {
+    -fx-padding: 0;
+}
+
+.tool-bar-horizontal {
+    -fx-padding: 0 0 0 5;
+}

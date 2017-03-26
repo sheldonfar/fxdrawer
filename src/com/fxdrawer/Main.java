@@ -11,10 +11,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("layout/main.fxml"));
-        Scene scene = new Scene(root, 800, 440);
+        Scene scene = new Scene(root, 800, 432);
         scene.getStylesheets().add("com/fxdrawer/css/style.css");
         primaryStage.setTitle("FXDrawer");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
