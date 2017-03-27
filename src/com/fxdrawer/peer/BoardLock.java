@@ -11,18 +11,18 @@ public class BoardLock {
     private Boolean isBlocking = false;
     private Boolean isLocked = false;
 
-    public Socket getLockInitiator() {
+    Socket getLockInitiator() {
         return lockInitiator;
     }
 
     private Boolean isTryingToBlock = false;
     private long timestamp;
 
-    public int getReceivedAcks() {
+    int getReceivedAcks() {
         return receivedAcks;
     }
 
-    public int getRequiredAcks() {
+    int getRequiredAcks() {
         return requiredAcks;
     }
 
@@ -39,24 +39,24 @@ public class BoardLock {
         return isTryingToBlock;
     }
 
-    public long getTimestamp() {
+    long getTimestamp() {
         return timestamp;
     }
 
-    public void init() {
+    void init() {
         timestamp = new Date().getTime();
         isTryingToBlock = true;
     }
 
-    public void setLockInitiator(Socket socket) {
+    void setLockInitiator(Socket socket) {
         lockInitiator = socket;
     }
 
-    public void setLocked(Boolean locked) {
+    void setLocked(Boolean locked) {
         isLocked = locked;
     }
 
-    public void tryToBlock() {
+    private void tryToBlock() {
         if (receivedAcks >= requiredAcks) {
             isBlocking = true;
             isTryingToBlock = false;
@@ -68,14 +68,14 @@ public class BoardLock {
         return isBlocking;
     }
 
-    public void unblock() {
+    void unblock() {
         isBlocking = false;
         isTryingToBlock = false;
         receivedAcks = 0;
         Platform.runLater(() -> view.lock(false));
     }
 
-    public void receivedAck(Socket socket, Packet packet, Boolean isMultiplexing) {
+    void receivedAck(Socket socket, Packet packet, Boolean isMultiplexing) {
         if (isTryingToBlock()) {
             receivedAcks++;
             tryToBlock();
@@ -87,7 +87,7 @@ public class BoardLock {
         }
 
         if (socket != null && lockInitiator == socket) {
-            isLocked = false;
+            setLocked(false);
             if (!isBlocking) {
                 Platform.runLater(() -> view.lock(false));
             }
@@ -95,11 +95,11 @@ public class BoardLock {
         }
     }
 
-    public void setRequiredAcks(int count) {
+    void setRequiredAcks(int count) {
         requiredAcks = count;
     }
 
-    public void setView(DrawController view) {
+    void setView(DrawController view) {
         this.view = view;
     }
 }
