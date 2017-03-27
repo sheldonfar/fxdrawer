@@ -19,8 +19,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,6 +44,8 @@ public class DrawController implements Initializable {
     public ListView log;
     public RadioToggleButton lockButton;
     public FontAwesomeIconView lockIcon;
+    public TextField hostTextField;
+    public TextField portTextField;
     private Peer peer;
     private Map<String, Tool> toolMap = new HashMap<>();
     private Tool tool;
@@ -122,8 +126,44 @@ public class DrawController implements Initializable {
         }
     }
 
-    public void openConnection(ActionEvent actionEvent) {
-        peer.openConnection("localhost", 9998);
+    public void openConnection(ActionEvent actionEvent) throws IOException {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Open Conntection");
+        dialog.setHeaderText("Enter host & port");
+
+        //dialog.setGraphic(new ImageView(this.getClass().getResource("login.png").toString()));
+
+        ButtonType okButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField host = new TextField("localhost");
+        host.setPromptText("Host");
+        TextField port = new TextField("9998");
+        port.setPromptText("Port");
+
+        grid.add(new Label("Host:"), 0, 0);
+        grid.add(host, 1, 0);
+        grid.add(new Label("Port:"), 0, 1);
+        grid.add(port, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return new Pair<>(host.getText(), port.getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        result.ifPresent(hostPort -> {
+            peer.openConnection(hostPort.getKey(), Integer.parseInt(hostPort.getValue()));
+        });
     }
 
     public void onPeerConnected(String hostName, int portNumber) {

@@ -83,7 +83,7 @@
                     <Label layoutX="95.0" layoutY="6.0" text="Status"/>
                     <Label layoutX="20.0" layoutY="32.0" text="Host:"/>
                     <Label fx:id="userHostLabel" layoutX="60.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
-                    <Label layoutX="178.0" layoutY="32.0" text="Port:"/>
+                    <Label layoutX="170.0" layoutY="32.0" text="Port:"/>
                     <Label fx:id="userPortLabel" layoutX="216.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
 
                     <Label layoutX="75.0" layoutY="85.0" text="Connected to"/>
@@ -91,7 +91,7 @@
 
                     <Label layoutX="20.0" layoutY="111.0" text="Host:"/>
                     <Label fx:id="peerHostLabel" layoutX="60.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
-                    <Label layoutX="178.0" layoutY="111.0" text="Port:"/>
+                    <Label layoutX="170.0" layoutY="111.0" text="Port:"/>
                     <Label fx:id="peerPortLabel" layoutX="216.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
                     <Separator layoutX="33.0" layoutY="140.0" prefHeight="0.0" prefWidth="200.0"/>
 
