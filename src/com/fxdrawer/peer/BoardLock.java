@@ -27,7 +27,7 @@ public class BoardLock {
     }
 
     private int receivedAcks = 0;
-    private int requiredAcks = 1;
+    private int requiredAcks = 0;
     private Socket lockInitiator;
     private DrawController view;
 
@@ -79,12 +79,14 @@ public class BoardLock {
         if (isTryingToBlock()) {
             receivedAcks++;
             tryToBlock();
-            packet.preventBroadcasting = true;
+            if (packet != null) {
+                packet.preventBroadcasting = true;
+            }
         } else if (isMultiplexing) {
             receivedAcks++;
         }
 
-        if (lockInitiator == socket) {
+        if (socket != null && lockInitiator == socket) {
             isLocked = false;
             if (!isBlocking) {
                 Platform.runLater(() -> view.lock(false));

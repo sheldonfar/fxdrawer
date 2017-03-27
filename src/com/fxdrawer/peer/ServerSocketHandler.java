@@ -18,12 +18,19 @@ public class ServerSocketHandler extends PeerSocketHandler {
         if (!bl.isTryingToBlock() || bl.getTimestamp() > packet.getTimestamp()) {
             bl.setLockInitiator(this.socket);
             bl.setLocked(true);
+            bl.receivedAck(null, null, true);
+
+            checkIfAllAcksCollected();
         }
     }
 
     public void receivedRequestLockAckPacket(PacketRequestLockAck packet) {
         bl.receivedAck(this.socket, packet, true);
 
+        checkIfAllAcksCollected();
+    }
+
+    private void checkIfAllAcksCollected() {
         if (bl.getReceivedAcks() >= bl.getRequiredAcks()) {
             peer.sendPacket(new PacketRequestLockAck(peer.getPort()), bl.getLockInitiator());
         }

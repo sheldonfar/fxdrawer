@@ -45,6 +45,8 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
                 logAction(packet);
                 if (!packet.preventBroadcasting) {
                     broadcastAction(packet);
+                } else {
+                    System.out.println("Preventing broadcasting of a packet " + packet);
                 }
             }
         } catch (Exception ignored) {

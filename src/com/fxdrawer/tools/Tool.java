@@ -38,7 +38,6 @@ public abstract class Tool {
 
     private void sendAction(Coordinates coordinates) {
         if (peer != null) {
-            System.out.println("SEND " + peer.getBoardLock().isLocked());
             if (!peer.getBoardLock().isLocked()) {
                 peer.onAction(getName(), getSize(), getColor().toString(), coordinates);
             }
