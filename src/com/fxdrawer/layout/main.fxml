@@ -47,7 +47,6 @@
                 </ToolBar>
                 <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                     <ToolBar styleClass="tool-bar-horizontal">
-                        <Label text="Size:"/>
                         <JFXComboBox fx:id="sizeCombo" prefWidth="70.0" editable="true">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -84,7 +83,7 @@
                     <Label layoutX="20.0" layoutY="32.0" text="Host:"/>
                     <Label fx:id="userHostLabel" layoutX="60.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
                     <Label layoutX="170.0" layoutY="32.0" text="Port:"/>
-                    <Label fx:id="userPortLabel" layoutX="216.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
+                    <Label fx:id="userPortLabel" layoutX="210.0" layoutY="32.0" prefHeight="17.0" prefWidth="60.0"/>
 
                     <Label layoutX="75.0" layoutY="85.0" text="Connected to"/>
                     <Separator layoutX="33.0" layoutY="66.0" prefWidth="200.0"/>
@@ -92,7 +91,7 @@
                     <Label layoutX="20.0" layoutY="111.0" text="Host:"/>
                     <Label fx:id="peerHostLabel" layoutX="60.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
                     <Label layoutX="170.0" layoutY="111.0" text="Port:"/>
-                    <Label fx:id="peerPortLabel" layoutX="216.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
+                    <Label fx:id="peerPortLabel" layoutX="210.0" layoutY="111.0" prefHeight="17.0" prefWidth="60.0"/>
                     <Separator layoutX="33.0" layoutY="140.0" prefHeight="0.0" prefWidth="200.0"/>
 
                     <VBox layoutX="29.0" layoutY="170.0">

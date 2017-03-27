@@ -27,7 +27,7 @@ public class BoardLock {
     }
 
     private int receivedAcks = 0;
-    private int requiredAcks = 0;
+    private int requiredAcks = 1;
     private Socket lockInitiator;
     private DrawController view;
 
@@ -46,6 +46,9 @@ public class BoardLock {
     void init() {
         timestamp = new Date().getTime();
         isTryingToBlock = true;
+        receivedAcks = 0;
+        lockInitiator = null;
+        isBlocking = false;
     }
 
     void setLockInitiator(Socket socket) {
@@ -82,8 +85,6 @@ public class BoardLock {
             if (packet != null) {
                 packet.preventBroadcasting = true;
             }
-        } else if (isMultiplexing) {
-            receivedAcks++;
         }
 
         if (socket != null && lockInitiator == socket) {
@@ -92,6 +93,11 @@ public class BoardLock {
                 Platform.runLater(() -> view.lock(false));
             }
             receivedAcks = 0;
+        } else if (isMultiplexing) {
+            receivedAcks++;
+            if (packet != null) {
+                packet.preventBroadcasting = true;
+            }
         }
     }
 

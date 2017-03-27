@@ -133,7 +133,7 @@ public class DrawController implements Initializable {
 
         //dialog.setGraphic(new ImageView(this.getClass().getResource("login.png").toString()));
 
-        ButtonType okButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
+        ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();

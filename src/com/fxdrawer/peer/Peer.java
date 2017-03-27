@@ -5,6 +5,7 @@ import com.fxdrawer.packet.*;
 import com.fxdrawer.util.Coordinates;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ public class Peer {
                     serverHandlers.put(socket, handler);
                     boardLock.setRequiredAcks(serverHandlers.size());
                 }
+            } catch (BindException e) {
+                System.out.println("Port already in use!");
             } catch (IOException e) {
                 System.err.println("Unable to process client request");
                 e.printStackTrace();
