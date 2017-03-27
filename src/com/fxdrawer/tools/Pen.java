@@ -31,8 +31,8 @@ public class Pen extends Tool {
         return this.color;
     }
 
-    public void draw(Coordinates coordinates) {
-        if (getPeer() != null && getPeer().getBoardLock().isLocked()) {
+    public void draw(Coordinates coordinates, Boolean forceDraw) {
+        if (!forceDraw && getPeer() != null && getPeer().getBoardLock().isLocked()) {
             return;
         }
         Line line = new Line(coordinates.getX1(), coordinates.getY1(), coordinates.getX2(), coordinates.getY2());

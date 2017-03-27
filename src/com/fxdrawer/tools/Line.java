@@ -38,8 +38,8 @@ public class Line extends Tool {
         super.onMouseDragged(event);
     }
 
-    public void draw(Coordinates coordinates) {
-        if (getPeer() != null && getPeer().getBoardLock().isLocked()) {
+    public void draw(Coordinates coordinates, Boolean forceDraw) {
+        if (!forceDraw && getPeer() != null && getPeer().getBoardLock().isLocked()) {
             return;
         }
         javafx.scene.shape.Line line = new javafx.scene.shape.Line(coordinates.getX1(), coordinates.getY1(), coordinates.getX2(), coordinates.getY2());

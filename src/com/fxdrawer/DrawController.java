@@ -138,7 +138,7 @@ public class DrawController implements Initializable {
         Color originalColor = tool.getColor();
         tool.setSize(size);
         tool.setColor(Color.valueOf(color));
-        tool.draw(coordinates);
+        tool.draw(coordinates, true);
         tool.setSize(originalSize);
         tool.setColor(originalColor);
     }

@@ -34,10 +34,11 @@ public abstract class Tool {
 
     protected abstract String getCursorPath();
 
-    public abstract void draw(Coordinates coordinates);
+    public abstract void draw(Coordinates coordinates, Boolean forceDraw);
 
     private void sendAction(Coordinates coordinates) {
         if (peer != null) {
+            System.out.println("SEND " + peer.getBoardLock().isLocked());
             if (!peer.getBoardLock().isLocked()) {
                 peer.onAction(getName(), getSize(), getColor().toString(), coordinates);
             }
@@ -71,7 +72,7 @@ public abstract class Tool {
         oldY = event.getY();
 
         Coordinates coordinates = new Coordinates(oldX, oldX, oldY, oldY);
-        draw(coordinates);
+        draw(coordinates, false);
         sendAction(coordinates);
     }
 
@@ -84,7 +85,7 @@ public abstract class Tool {
         double currentY = event.getY();
 
         Coordinates coordinates = new Coordinates(oldX, currentX, oldY, currentY);
-        draw(coordinates);
+        draw(coordinates, false);
         sendAction(coordinates);
 
         oldX = currentX;
