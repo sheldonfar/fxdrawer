@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.fxdrawer.util.RadioToggleButton?>
-<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXColorPicker?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXToggleButton?>
@@ -28,20 +27,20 @@
                     </fx:define>
                     <RadioToggleButton textValue="Pen" toggleGroup="$toolToggleGroup" selected="true">
                         <graphic>
-                            <MaterialDesignIconView size="25.0" glyphName="PENCIL" styleClass="tool-icon"/>
+                            <MaterialDesignIconView size="25.0" glyphName="PENCIL" styleClass="fade-icon"/>
                         </graphic>
                     </RadioToggleButton>
                     <RadioToggleButton textValue="Eraser" toggleGroup="$toolToggleGroup">
                         <graphic>
                             <StackPane>
-                                <MaterialDesignIconView size="25.0" glyphName="ERASER" styleClass="tool-icon"/>
+                                <MaterialDesignIconView size="25.0" glyphName="ERASER" styleClass="fade-icon"/>
                             </StackPane>
                         </graphic>
                     </RadioToggleButton>
                     <RadioToggleButton textValue="Line" toggleGroup="$toolToggleGroup">
                         <graphic>
                             <StackPane>
-                                <MaterialDesignIconView size="25.0" glyphName="VECTOR_LINE" styleClass="tool-icon"/>
+                                <MaterialDesignIconView size="25.0" glyphName="VECTOR_LINE" styleClass="fade-icon"/>
                             </StackPane>
                         </graphic>
                     </RadioToggleButton>
@@ -68,11 +67,12 @@
                         <Separator orientation="VERTICAL"/>
                         <JFXToggleButton fx:id="toggleStateSwitch" onAction="#onToggleStateClick"/>
                         <Separator orientation="VERTICAL"/>
-                        <JFXButton fx:id="lockButton" onAction="#onLockButtonClick" visible="false">
+                        <RadioToggleButton fx:id="lockButton" onAction="#onLockButtonClick" visible="false">
                             <graphic>
-                                <FontAwesomeIconView fx:id="lockIcon" size="15.0" glyphName="UNLOCK_ALT"/>
+                                <FontAwesomeIconView fx:id="lockIcon" size="20.0" glyphName="UNLOCK_ALT"
+                                                     styleClass="fade-icon"/>
                             </graphic>
-                        </JFXButton>
+                        </RadioToggleButton>
                     </ToolBar>
                     <Pane fx:id="drawPane" onMouseClicked="#onPanelMouseClicked" onMouseDragged="#onPanelMouseDragged"
                           onMouseMoved="#onPanelMouseMoved" onMouseReleased="#onPanelMouseReleased" prefHeight="330.0"

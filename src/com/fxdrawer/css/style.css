@@ -10,7 +10,7 @@
     -fx-background-color: #FFFFFF;
 }
 
-.tool-icon {
+.fade-icon {
     -icons-color: #C0CAD0;
     -fx-text-fill: -icons-color;
     -fx-fill: -icons-color;
@@ -18,7 +18,7 @@
     -fx-border-color: black;
 }
 
-.tool-icon:hover, .tools-bar .toggle-button:selected .tool-icon {
+.fade-icon:hover, .toggle-button:selected .fade-icon {
     -icons-color: #465257;
     -fx-text-fill: -icons-color;
     -fx-fill: -icons-color;

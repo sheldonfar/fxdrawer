@@ -8,7 +8,6 @@ import com.fxdrawer.tools.Pen;
 import com.fxdrawer.tools.Tool;
 import com.fxdrawer.util.Coordinates;
 import com.fxdrawer.util.RadioToggleButton;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXColorPicker;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
@@ -41,7 +40,7 @@ public class DrawController implements Initializable {
     public ToggleGroup toolToggleGroup;
     public JFXComboBox sizeCombo;
     public ListView log;
-    public JFXButton lockButton;
+    public RadioToggleButton lockButton;
     public FontAwesomeIconView lockIcon;
     private Peer peer;
     private Map<String, Tool> toolMap = new HashMap<>();
