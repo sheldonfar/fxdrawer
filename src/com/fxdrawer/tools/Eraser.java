@@ -7,7 +7,6 @@ import javafx.scene.shape.Line;
 
 public class Eraser extends Tool {
     private Color color = Color.WHITE;
-    String name = "Eraser";
 
     public Eraser(Pane pane, int size) {
         super(pane);
@@ -24,6 +23,9 @@ public class Eraser extends Tool {
     }
 
     public void draw(Coordinates coordinates) {
+        if (getPeer() != null && getPeer().getBoardLock().isLocked()) {
+            return;
+        }
         Line line = new Line(coordinates.getX1(), coordinates.getY1(), coordinates.getX2(), coordinates.getY2());
         line.setStrokeWidth(this.size);
         line.setStroke(color);
@@ -39,6 +41,6 @@ public class Eraser extends Tool {
     }
 
     public String getName() {
-        return this.name;
+        return "Eraser";
     }
 }

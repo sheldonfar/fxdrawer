@@ -1,14 +1,14 @@
 package com.fxdrawer.tools;
 
 import com.fxdrawer.util.Coordinates;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
-public class Pen extends Tool {
+public class Line extends Tool {
     private Color color;
 
-    public Pen(Pane pane, int size, Color color) {
+    public Line(Pane pane, int size, Color color) {
         super(pane);
         createCursor();
         setSize(size);
@@ -31,11 +31,18 @@ public class Pen extends Tool {
         return this.color;
     }
 
+    public void onMouseDragged(MouseEvent event) {
+    }
+
+    public void onMouseReleased(MouseEvent event) {
+        super.onMouseDragged(event);
+    }
+
     public void draw(Coordinates coordinates) {
         if (getPeer() != null && getPeer().getBoardLock().isLocked()) {
             return;
         }
-        Line line = new Line(coordinates.getX1(), coordinates.getY1(), coordinates.getX2(), coordinates.getY2());
+        javafx.scene.shape.Line line = new javafx.scene.shape.Line(coordinates.getX1(), coordinates.getY1(), coordinates.getX2(), coordinates.getY2());
         line.setStrokeWidth(size);
         line.setStroke(color);
 
@@ -43,6 +50,6 @@ public class Pen extends Tool {
     }
 
     public String getName() {
-        return "Pen";
+        return "Line";
     }
 }

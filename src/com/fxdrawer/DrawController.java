@@ -3,6 +3,7 @@ package com.fxdrawer;
 import com.fxdrawer.peer.BoardLock;
 import com.fxdrawer.peer.Peer;
 import com.fxdrawer.tools.Eraser;
+import com.fxdrawer.tools.Line;
 import com.fxdrawer.tools.Pen;
 import com.fxdrawer.tools.Tool;
 import com.fxdrawer.util.Coordinates;
@@ -42,10 +43,7 @@ public class DrawController implements Initializable {
     public ListView log;
     public JFXButton lockButton;
     public FontAwesomeIconView lockIcon;
-    private double oldX;
-    private double oldY;
     private Peer peer;
-    private long lastPressProcessed = System.currentTimeMillis();
     private Map<String, Tool> toolMap = new HashMap<>();
     private Tool tool;
     private Set<String> stringSet = new HashSet<>();
@@ -56,6 +54,8 @@ public class DrawController implements Initializable {
         int initialToolSize = (int) sizeSlider.getValue();
         toolMap.put("Pen", new Pen(drawPane, initialToolSize, colorPicker.getValue()));
         toolMap.put("Eraser", new Eraser(drawPane, initialToolSize));
+        toolMap.put("Line", new Line(drawPane, initialToolSize, colorPicker.getValue()));
+
         tool = toolMap.get("Pen");
         drawPane.setCursor(tool.getCursor());
 
@@ -79,43 +79,20 @@ public class DrawController implements Initializable {
         colorPicker.setOnAction(t -> tool.setColor(colorPicker.getValue()));
     }
 
-    public void onPanelClick(MouseEvent event) {
-        oldX = event.getX();
-        oldY = event.getY();
-
-        draw(new Coordinates(oldX, oldX, oldY, oldY));
+    public void onPanelMouseClicked(MouseEvent event) {
+        tool.onMouseClicked(event);
     }
 
-    public void onPanelMouseMove(MouseEvent event) {
-        oldX = event.getX();
-        oldY = event.getY();
+    public void onPanelMouseMoved(MouseEvent event) {
+        tool.onMouseMoved(event);
     }
 
-    public void onPanelMouseDrag(MouseEvent event) {
-        if (System.currentTimeMillis() - lastPressProcessed < 50) {
-            return;
-        }
-
-        double currentX = event.getX();
-        double currentY = event.getY();
-
-        draw(new Coordinates(oldX, currentX, oldY, currentY));
-
-        oldX = currentX;
-        oldY = currentY;
-
-        lastPressProcessed = System.currentTimeMillis();
+    public void onPanelMouseDragged(MouseEvent event) {
+        tool.onMouseDragged(event);
     }
 
-    private void draw(Coordinates coord) {
-        if (peer != null) {
-            if (!peer.getBoardLock().isLocked()) {
-                tool.draw(coord);
-                peer.onAction(tool.getName(), tool.getSize(), tool.getColor().toString(), coord);
-            }
-        } else {
-            tool.draw(coord);
-        }
+    public void onPanelMouseReleased(MouseEvent event) {
+        tool.onMouseReleased(event);
     }
 
     public void onToggleStateClick() throws IOException {
@@ -133,6 +110,10 @@ public class DrawController implements Initializable {
                     peer = new Peer(Integer.parseInt(port));
                     peer.setView(this);
                     peer.serve();
+
+                    for (Tool tool : toolMap.values()) {
+                        tool.setPeer(peer);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

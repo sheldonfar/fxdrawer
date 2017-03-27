@@ -47,8 +47,7 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
                     broadcastAction(packet);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         } finally {
             connectionClosed();
             out.close();

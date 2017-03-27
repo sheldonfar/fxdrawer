@@ -6,6 +6,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -27,13 +28,20 @@
                     </fx:define>
                     <RadioToggleButton textValue="Pen" toggleGroup="$toolToggleGroup" selected="true">
                         <graphic>
-                            <FontAwesomeIconView size="25.0" glyphName="PENCIL" styleClass="tool-icon"/>
+                            <MaterialDesignIconView size="25.0" glyphName="PENCIL" styleClass="tool-icon"/>
                         </graphic>
                     </RadioToggleButton>
                     <RadioToggleButton textValue="Eraser" toggleGroup="$toolToggleGroup">
                         <graphic>
                             <StackPane>
-                                <FontAwesomeIconView size="20.0" glyphName="ERASER" styleClass="tool-icon"/>
+                                <MaterialDesignIconView size="25.0" glyphName="ERASER" styleClass="tool-icon"/>
+                            </StackPane>
+                        </graphic>
+                    </RadioToggleButton>
+                    <RadioToggleButton textValue="Line" toggleGroup="$toolToggleGroup">
+                        <graphic>
+                            <StackPane>
+                                <MaterialDesignIconView size="25.0" glyphName="VECTOR_LINE" styleClass="tool-icon"/>
                             </StackPane>
                         </graphic>
                     </RadioToggleButton>
@@ -66,8 +74,9 @@
                             </graphic>
                         </JFXButton>
                     </ToolBar>
-                    <Pane fx:id="drawPane" onMouseClicked="#onPanelClick" onMouseDragged="#onPanelMouseDrag"
-                          onMouseMoved="#onPanelMouseMove" prefHeight="330.0" prefWidth="500.0"
+                    <Pane fx:id="drawPane" onMouseClicked="#onPanelMouseClicked" onMouseDragged="#onPanelMouseDragged"
+                          onMouseMoved="#onPanelMouseMoved" onMouseReleased="#onPanelMouseReleased" prefHeight="330.0"
+                          prefWidth="500.0"
                           style="-fx-background-color: white;"/>
                 </SplitPane>
                 <AnchorPane maxWidth="100">
