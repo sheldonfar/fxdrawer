@@ -57,7 +57,7 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
         }
     }
 
-    private void connectionClosed() {
+    protected void connectionClosed() {
     }
 
     protected abstract void logAction(Packet packet);

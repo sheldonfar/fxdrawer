@@ -30,6 +30,15 @@ public class ServerSocketHandler extends PeerSocketHandler {
         checkIfAllAcksCollected();
     }
 
+    protected void connectionClosed() {
+        if (bl.isLocked() && bl.getLockInitiator() == this.socket) {
+            peer.onConnectionClosed(this.socket);
+            PacketRequestLockAck packet = new PacketRequestLockAck(peer.getPort());
+            peer.sendPacket(packet);
+            bl.receivedAck(bl.getLockInitiator(), packet, true);
+        }
+    }
+
     private void checkIfAllAcksCollected() {
         if (bl.getReceivedAcks() >= bl.getRequiredAcks()) {
             peer.sendPacket(new PacketRequestLockAck(peer.getPort()), bl.getLockInitiator());

@@ -69,11 +69,11 @@ public class Peer {
         this.boardLock.setView(view);
     }
 
-    public DrawController getView() {
+    DrawController getView() {
         return this.view;
     }
 
-    public int getPort() {
+    int getPort() {
         return this.port;
     }
 
@@ -87,7 +87,7 @@ public class Peer {
         }
     }
 
-    public void sendPacket(Packet packet) {
+    void sendPacket(Packet packet) {
         if (clientHandler != null && clientHandler.getState() == PeerState.CONNECTED) {
             clientHandler.sendPacket(packet);
         } else if (serverHandlers.size() != 0) {
@@ -97,7 +97,7 @@ public class Peer {
         }
     }
 
-    public void sendPacket(Packet packet, Socket socket) {
+    void sendPacket(Packet packet, Socket socket) {
         for (Object o : serverHandlers.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             if (pair.getKey() == socket) {
@@ -110,12 +110,17 @@ public class Peer {
         return this.boardLock;
     }
 
-    public void broadcastAction(Socket socket, Packet packet) {
+    void broadcastAction(Socket socket, Packet packet) {
         for (Object o : serverHandlers.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             if (pair.getKey() != socket) {
                 ((ServerSocketHandler) pair.getValue()).sendPacket(packet);
             }
         }
+    }
+
+    void onConnectionClosed(Socket socket) {
+        serverHandlers.remove(socket);
+        boardLock.setRequiredAcks(serverHandlers.size());
     }
 }
