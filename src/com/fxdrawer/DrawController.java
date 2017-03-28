@@ -72,6 +72,7 @@ public class DrawController implements Initializable {
         toolToggleGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> {
             if (toolToggleGroup.getSelectedToggle() != null) {
                 tool = toolMap.get(((RadioToggleButton) toolToggleGroup.getSelectedToggle()).getTextValue());
+                tool.setColor(colorPicker.getValue());
             }
         });
 
