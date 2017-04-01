@@ -14,7 +14,6 @@ import com.jfoenix.controls.JFXToggleButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -127,44 +126,50 @@ public class DrawController implements Initializable {
         }
     }
 
-    public void openConnection(ActionEvent actionEvent) throws IOException {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("Open Conntection");
-        dialog.setHeaderText("Enter host & port");
+    public void onConnectButtonClick() throws IOException {
+        if (peer.isConnected()) {
+            peer.disconnect();
+            connectBtn.setText("Connect");
+        } else {
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("Open Connection");
+            dialog.setHeaderText("Enter host & port");
 
-        //dialog.setGraphic(new ImageView(this.getClass().getResource("login.png").toString()));
+            //dialog.setGraphic(new ImageView(this.getClass().getResource("login.png").toString()));
 
-        ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+            ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
 
-        TextField host = new TextField("localhost");
-        host.setPromptText("Host");
-        TextField port = new TextField("9998");
-        port.setPromptText("Port");
+            TextField host = new TextField("localhost");
+            host.setPromptText("Host");
+            TextField port = new TextField("9998");
+            port.setPromptText("Port");
 
-        grid.add(new Label("Host:"), 0, 0);
-        grid.add(host, 1, 0);
-        grid.add(new Label("Port:"), 0, 1);
-        grid.add(port, 1, 1);
+            grid.add(new Label("Host:"), 0, 0);
+            grid.add(host, 1, 0);
+            grid.add(new Label("Port:"), 0, 1);
+            grid.add(port, 1, 1);
 
-        dialog.getDialogPane().setContent(grid);
+            dialog.getDialogPane().setContent(grid);
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == okButtonType) {
-                return new Pair<>(host.getText(), port.getText());
-            }
-            return null;
-        });
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == okButtonType) {
+                    return new Pair<>(host.getText(), port.getText());
+                }
+                return null;
+            });
 
-        Optional<Pair<String, String>> result = dialog.showAndWait();
+            Optional<Pair<String, String>> result = dialog.showAndWait();
 
-        result.ifPresent(hostPort -> {
-            peer.openConnection(hostPort.getKey(), Integer.parseInt(hostPort.getValue()));
-        });
+            result.ifPresent(hostPort -> {
+                peer.openConnection(hostPort.getKey(), Integer.parseInt(hostPort.getValue()));
+                connectBtn.setText("Disconnect");
+            });
+        }
     }
 
     public void onPeerConnected(String hostName, int portNumber) {

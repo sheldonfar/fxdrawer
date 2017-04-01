@@ -22,6 +22,13 @@ public class ClientSocketHandler extends PeerSocketHandler {
         }
     }
 
+    protected void connectionClosed() {
+        super.connectionClosed();
+        if (bl.isLocked()) {
+            bl.receivedAck(bl.getLockInitiator(), null, true);
+        }
+    }
+
     public void receivedRequestLockAckPacket(PacketRequestLockAck packet) {
         bl.receivedAck(this.socket, packet, false);
     }

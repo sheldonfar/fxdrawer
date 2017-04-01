@@ -31,8 +31,9 @@ public class ServerSocketHandler extends PeerSocketHandler {
     }
 
     protected void connectionClosed() {
+        peer.onConnectionClosed(this.socket);
+
         if (bl.isLocked() && bl.getLockInitiator() == this.socket) {
-            peer.onConnectionClosed(this.socket);
             PacketRequestLockAck packet = new PacketRequestLockAck(peer.getPort());
             peer.sendPacket(packet);
             bl.receivedAck(bl.getLockInitiator(), packet, true);

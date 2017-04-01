@@ -121,6 +121,18 @@ public class Peer {
 
     void onConnectionClosed(Socket socket) {
         serverHandlers.remove(socket);
+        if (clientHandler != null && clientHandler.getSocket() == socket) {
+            clientHandler = null;
+        }
         boardLock.setRequiredAcks(serverHandlers.size());
+    }
+
+    public Boolean isConnected() {
+        return clientHandler != null;
+    }
+
+    public void disconnect() {
+        clientHandler.connectionClosed();
+        clientHandler = null;
     }
 }

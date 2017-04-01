@@ -16,7 +16,7 @@
     <SplitPane dividerPositions="0.5" orientation="VERTICAL">
         <MenuBar>
             <Menu mnemonicParsing="false" text="Client">
-                <MenuItem fx:id="connectBtn" mnemonicParsing="false" onAction="#openConnection" text="Connect"/>
+                <MenuItem fx:id="connectBtn" mnemonicParsing="false" onAction="#onConnectButtonClick" text="Connect"/>
             </Menu>
         </MenuBar>
         <SplitPane fx:id="mainSplitPane" dividerPositions="0.8">

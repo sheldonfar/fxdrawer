@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.net.SocketException;
 
 public abstract class SocketHandler implements Runnable, Serializable, PacketHandler {
     protected transient final Socket socket;
@@ -52,12 +53,17 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
         } catch (Exception ignored) {
         } finally {
             connectionClosed();
-            out.close();
-            in.close();
+
         }
     }
 
     protected void connectionClosed() {
+        try {
+            out.close();
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected abstract void logAction(Packet packet);
@@ -68,8 +74,14 @@ public abstract class SocketHandler implements Runnable, Serializable, PacketHan
         try {
             out.writeObject(packet);
             logAction(packet);
+        } catch (SocketException e) {
+            connectionClosed();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }

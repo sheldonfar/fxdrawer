@@ -87,6 +87,7 @@ public class BoardLock {
             }
         }
 
+        System.out.println("RECEIVED ACK " + (lockInitiator == socket));
         if (socket != null && lockInitiator == socket) {
             setLocked(false);
             if (!isBlocking) {
